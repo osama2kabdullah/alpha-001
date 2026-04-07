@@ -1,0 +1,218 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --neon-blue: #00e5ff;
+  --deep-bg: #000a14;
+  --panel-bg: rgba(0, 20, 40, 0.6);
+  --border-glow: rgba(0, 229, 255, 0.3);
+}
+
+body {
+  background: #000;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+  height: 100vh;
+  width: 100vw;
+  color: var(--neon-blue);
+}
+
+/* ── Background & Effects ── */
+#bgCanvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+
+#earthCanvas {
+  position: fixed;
+  top: 50%; left: 55%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0 30px rgba(0, 150, 255, 0.2));
+}
+
+#vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  background: radial-gradient(circle at center, transparent 20%, rgba(0,5,15,0.9) 100%);
+  pointer-events: none;
+}
+
+/* ── Code Panel (Left) ── */
+#codePanel {
+  position: fixed;
+  top: 0; left: 0;
+  width: 30%;
+  height: 100vh;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+}
+
+#codeInner {
+  animation: scrollCode 40s linear infinite;
+  padding: 40px;
+}
+
+@keyframes scrollCode {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+
+.code-line {
+  font-size: 12px;
+  line-height: 1.6;
+  white-space: nowrap;
+  text-shadow: 0 0 5px var(--neon-blue);
+  opacity: 0.6;
+}
+
+/* ── HUD Frame (Profile Section) ── */
+.hud-container {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.identity-card {
+  position: relative;
+  background: var(--panel-bg);
+  border: 1px solid var(--neon-blue);
+  padding: 15px;
+  width: 340px;
+  clip-path: polygon(0 0, 92% 0, 100% 8%, 100% 100%, 8% 100%, 0 92%);
+  box-shadow: inset 0 0 20px var(--border-glow);
+  backdrop-filter: blur(10px);
+}
+
+.card-header {
+  font-size: 10px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border-glow);
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  letter-spacing: 1px;
+}
+
+.photo-frame {
+  width: 100%;
+  height: 240px;
+  background: #001a2d;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 229, 255, 0.2);
+}
+
+.photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.8) contrast(1.1) brightness(0.9) sepia(0.2) hue-rotate(180deg);
+}
+
+.scanner {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--neon-blue);
+  box-shadow: 0 0 15px var(--neon-blue);
+  animation: scan 3.5s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes scan {
+  0%, 100% { top: 0%; opacity: 0; }
+  50% { top: 100%; opacity: 1; }
+}
+
+/* ── Name & Socials ── */
+.user-name {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+  margin-top: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.social-links {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.social-btn {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid var(--neon-blue);
+  background: transparent;
+  color: var(--neon-blue);
+  text-decoration: none;
+  font-size: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.social-btn:hover {
+  background: var(--neon-blue);
+  color: #000;
+  box-shadow: 0 0 15px var(--neon-blue);
+}
+
+/* ── Info Panel (Bottom Right) ── */
+#tagline {
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 4;
+  text-align: right;
+}
+
+.status-panel {
+  background: var(--panel-bg);
+  border-right: 4px solid var(--neon-blue);
+  padding: 20px;
+  backdrop-filter: blur(5px);
+}
+
+.status-panel h1 {
+  font-size: 32px;
+  letter-spacing: 4px;
+  color: #fff;
+  margin-bottom: 5px;
+}
+
+.status-panel p {
+  font-size: 14px;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  .status-panel h1 {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 900px) {
+  #codePanel { display: none; }
+  #earthCanvas { left: 50%; }
+  .hud-container { left: 20px; top: 20px; width: calc(100% - 40px); }
+  .identity-card { width: 100%; }
+  #tagline { left: 20px; right: 20px; text-align: center; }
+}
